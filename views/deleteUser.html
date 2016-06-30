@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+	<link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap.min.css">
+	<script src="/javascripts/lib/jquery.min.js"></script>
+</head>
+<body class="container	">
+	<p class="text-center"><b>Remove your Account</b> </p>
+	<form action="/user" method="DELETE" id="userForm"> 
+		<div class="row">
+			<div class="col-sm-4"></div>
+			<div class="col-sm-4">
+				<label>Email</label><input class="form-control" type="text" id="email" name="email"><br>
+				<label>Password</label><input class="form-control" type="password" id="password" name="password"><br>
+				<input type="submit" onClick="return validate()">
+			</div>
+			<div class="col-sm-4"></div>
+		</div>
+		</div>
+	</form>	
+	</body>
+	<script>
+		function validate(){
+						var x = document.forms["userForm"]["email"].value;
+                        var atpos = x.indexOf("@");
+                        var dotpos = x.lastIndexOf(".");
+                        if(atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length)
+                        {
+                            alert("Invalid:Enter valid email Address");
+                             document.getElementById("email").focus(); 
+                            return false;  
+                        }
+						else if(( document.getElementById("password").value ==''))
+                        {
+                            alert("Enter Password");
+                             document.getElementById("password").focus(); 
+                            return false;   
+                        }
+
+		}
+	</script>
+	<script >
+	$( document ).ready(function() {
+		 $("#userForm").submit(function(e) {    
+
+		 		var data = {email:$("#email").val(), password:$("#password").val()}
+		    $.ajax({
+		    	type: "DELETE",
+		    	url: "/user?email="+$("#email").val(),
+		    	data: data, // serializes the form's elements.
+		      success: function(data){
+		      	alert("Account Deleted")
+		               window.location.href="/landing" // show response from the php script.
+		      }
+		    });
+
+		    e.preventDefault(); // avoid to execute the actual submit of the form.
+		});
+	});
+	</script>
+</html>

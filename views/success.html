@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+       <link rel='stylesheet' href='/stylesheets/style.css' />
+        <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
+          
+    
+
+    </head>
+  <body style="background-image:url("/image/img1.jpeg");">
+    <div class="container">
+      <h1>You place order here</h1>
+      <hr/>
+      <nav class="nav navbar-nav navbar-right">
+        <ul class="nav nav-pills">
+          
+          <li role="contentinfo"><a href="landing">Logout</a></li>          
+        </ul>      
+      </nav>
+
+      <a  href="#display" class="btn btn-primary">Meal</a>
+      <div class="ui-widget"align=right; >
+  <label for="tags">Search: </label>
+  <input id="tags">
+</div>
+      <div class="page">  </div>
+    </div>
+
+      <script>
+  $(function() {
+    var availableTags = [
+      "Dal fry",
+      "Dal makhani",
+      "aloo matter",
+      "dal bati",
+      
+    ];
+    $( "#tags" ).autocomplete({
+      source: availableTags
+    });
+  });
+  </script>
+    <script type="text/x-handlebars-template" id="order-list-template">
+          
+    <div class="table-responsive">
+      <table class="table">
+        <thead> 
+
+          <th>Item Name</th>
+          <th style="color:black;">price</th>
+         
+        </thead>
+        
+        {{#each orders }}
+        <tr>
+       
+          <td>{{this.name}}</td>
+          <td style="color:black;">{{this.price}}</td>
+                   
+          <td><a  href="/#order/{{this._id }}" class="btn btn-primary">Order Now</a></td>
+          <td><button class="btn btn-danger delete" data-id="{{this._id}}">DELETE</button></td>
+        </tr>
+        {{/each}}
+      </table>
+    </div>
+
+    </script>
+
+     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"> </script>
+    <script src="javascripts/underscore.js" type="text/javascript"></script>
+    <script src="javascripts/handlebars-v3.0.3.js" type="text/javascript"></script>
+    <script src="javascripts/backbone.js" type="text/javascript"></script>
+    
+    <script >  
+    //serialize object is used to get form data in a object in key-value pair
+      $.fn.serializeObject = function() {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function() {
+            if (o[this.name] !== undefined) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+      };
+
+var Orders = Backbone.Collection.extend({  
+        url: '/orders'
+      });
+
+      var Order = Backbone.Model.extend({        
+        
+        urlRoot: '/orders'                
+      });
+
+      
+
+      var NewOrderListView = Backbone.View.extend({    
+
+        el:'.page',
+        render: function() {
+          var that = this;
+          var orders = new Orders(); 
+          
+          orders.fetch({                
+            success: function (orders) {
+              console.log("Success")
+
+              console.log(orders.toJSON())
+              console.log("kjzhcjkfdhfjk");
+              //var template = Handlebars.compile($('#order-list-template').html()); 
+              var template = Handlebars.compile($('#order-list-template').html());
+              console.log("kjhdjksa");
+              that.$el.html(template({orders: orders.toJSON()}));
+              console.log("dfdff");
+              
+            }, error: function(){
+              
+            }
+          })                               
+        },
+        events: {                              
+        
+        'click .delete':'deleteUser'
+        },
+        deleteUser:function(ev){                  
+
+          var orderId = $(ev.currentTarget).data('id');
+          var order = new Order({id: orderId});
+
+          order.destroy({
+            success:function(){
+              window.location.reload();
+            }
+          })
+          return false;
+        }
+      });
+
+   
+        var Router = Backbone.Router.extend({
+          routes:{
+              'display' : 'home',
+             
+
+          }
+        })
+
+        
+        var newOrderList = new NewOrderListView();
+       
+        var router = new Router();
+        router.on('route:home',function(){          
+          newOrderList.render();
+        });
+
+        
+        Backbone.history.start();
+        
+    </script>

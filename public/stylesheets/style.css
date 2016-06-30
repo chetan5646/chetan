@@ -1,0 +1,10 @@
+body {
+  padding: 30px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: black;
+  background-image:url("/image/img1.jpeg");
+}
+
+a {
+  color: #00B7FF;
+}

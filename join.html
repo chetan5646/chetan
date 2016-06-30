@@ -1,0 +1,50 @@
+<html>
+<head>
+<title>Join Html</title></head>
+<body>
+<center>
+	<h1>Join Tables</h1>
+<form action="/user" method="POST" id="userForm"> 
+<div class="row">
+	<label>id</label><input class="form-control" type="text" id="_id" name="_id"> 
+		<label>Name</label><input class="form-control" type="text" id="name" name="name"> 
+			<label>title</label><input class="form-control" type="text" id="title" name="title"> 
+				<label>Author</label><input class="form-control" type="text" id="author" 
+				name="author"> 
+</div>
+
+<a href ="success" type="submit" class="btn btn-default"style="background-color:#00ccff;border:none" >Submit</a>
+</form>
+</center>
+
+
+</body>
+
+
+<script >
+	$( document ).ready(function() {
+		 $("#userForm").submit(function(e) {    
+
+		 		var data = {
+		 				id:$("#_id").val(),
+		 				name:$("#name").val(),
+		 				title:$("#title").val(), 
+		 				author:$("#author").val(),
+		 			}
+
+		    $.ajax({
+		    	type: "POST",
+		    	url: "/user?name="+$("#name").val(),
+		    	data: data, // serializes the form's elements.
+		      success: function(data){
+		      			alert("user added")
+		               window.location.href="success" // show response from the php script.
+		      }
+		    });
+
+		    e.preventDefault(); // avoid to execute the actual submit of the form.
+		});
+	});
+
+
+</html>

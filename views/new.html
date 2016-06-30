@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+	<link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap.min.css">
+	<script src="/javascripts/jquery.js"></script>
+</head>
+<body class="container	">
+	<p class="text-center"><b>Register....</b> </p>
+	<form action="/user" method="POST" id="userForm"> 
+		<div class="row">
+			<div class="col-sm-4"></div>
+			<div class="col-sm-4">
+				<label>Name</label><input class="form-control" type="text" id="name" name="name"> 
+				<br>
+				<label>Email</label><input class="form-control" type="text" id="email" name="email">
+				<br>
+				<label>Password</label><input class="form-control" type="password" id="password"       name="password">
+				<br>
+				<label>Confirm Password</label><input class="form-control" type="password"            id="cpassword" name="cpassword">
+				<br>
+			
+				<label>contact</label><input class="form-control" type="text" id="contact" name="contact"><br>
+				<label id="address">Address:</label>
+				<br>
+				<select name="city" id="city" type="text">
+				<option selected="" value="Default">(Please select a city)</option>
+				<option value="Mumbai">Mumbai</option>
+				<option value="pune">pune </option>
+				<option value="kolhapur">kolhapur</option>
+				<option value="Sangli">Sangli</option>
+				<option value="Satara">Satara</option>
+				</select><br>
+				<label>locality</label><input class="form-control" type="text" id="locality" name="locality"><br>
+				<label>zipcode</label><input class="form-control" type="text" id="zipcode" name="zipcode"><br>
+				<select name="gender" id="gender">
+				<option selected="" value="Default">(Please select a gender)</option>
+				<option value="male">male</option>
+				<option value="female">female</option>
+				</select><br><br>
+				<!-- <li><label id="gender">Sex:</label></li>
+				<li><input type="radio" id="male"name="gender" value="Male" /><span>Male</span></li>
+				<li><input type="radio" id="female"name="gender" value="Female" /><span>Female</span></li>
+				<br> -->
+				<input type="submit" onClick="return validate()" >
+			</div>
+			<div class="col-sm-4"></div>
+		</div>
+		</div>
+	</form>	
+	</body>
+	
+	<script >
+                     function validate(){
+                        var x = document.forms["userForm"]["email"].value;
+                        var atpos = x.indexOf("@");
+                        var dotpos = x.lastIndexOf(".");
+
+                        if(( document.getElementById("name").value =='')|| !isNaN( document.getElementById("name").value))
+                        {
+                            alert("Invalid :Enter name"); 
+                            document.getElementById("name").focus();  
+                            return false; 
+                        }
+                    else if(atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length)
+                        {
+                            alert("Invalid:Enter valid email Address");
+                             document.getElementById("email").focus(); 
+                            return false;  
+                        }
+                     else if(( document.getElementById("password").value ==''))
+                        {
+                            alert("Invalid:Password");
+                             document.getElementById("password").focus(); 
+                            return false;   
+                        }
+                        else if(( document.getElementById("cpassword").value =='')||(document.getElementById("cpassword").value != document.getElementById("password").value))
+                        {
+                            alert("Password and  Confirm Password not same");
+                             document.getElementById("cpassword").focus(); 
+                            return false;   
+                        }
+                    	else if(( document.getElementById("contact").value.length != 10)|| isNaN( document.getElementById("contact").value))
+                        {   
+                            alert("Invalid:Enter Contact number");
+                            document.getElementById("contact").focus(); 
+                            return false;
+                        }
+                        else if(( document.getElementById("city").value =="Default")|| !isNaN( document.getElementById("city").value))
+                        {   
+                            alert("Invalid:Enter city");
+                             document.getElementById("city").focus(); 
+                            return false;  
+
+                        }
+                        else if(( document.getElementById("locality").value =='')|| !isNaN( document.getElementById("locality").value))
+                        {   
+                            alert("Invalid:Enter locality");
+                           document.getElementById("locality").focus();
+                            return false;   
+                        }
+
+                        else if(( document.getElementById("zipcode").value =='')|| isNaN( document.getElementById("zipcode").value))
+                        {   
+                            alert("Invalid:Enter zipcode");
+                           document.getElementById("zipcode").focus();
+                            return false;  
+                        }
+                        else if(( document.getElementById("gender").value =="Default")|| !isNaN( document.getElementById("gender").value))
+                        {   
+                            alert("Invalid:Enter gender");
+                             document.getElementById("gender").focus(); 
+                            return false;  
+
+                        }
+                        else if(( document.getElementById("sport").value =='')|| !isNaN( document.getElementById("sport").value))
+                        {   
+                            alert("Invalid:Enter sport");
+                           document.getElementById("sport").focus();
+                            return false;   
+                        }
+
+            }
+  </script>
+<script >
+	$( document ).ready(function() {
+		 $("#userForm").submit(function(e) {    
+
+		 		var data = {name:$("#name").val(),
+		 				email:$("#email").val(), 
+		 				password:$("#password").val(),
+		 				confirmPassword:$("#cpassword").val(),
+		 				contact:$("#contact").val(),
+		 				city:$("#city").val(),
+		 				locality:$("#locality").val(),
+		 				zipcode:$("#zipcode").val(),
+		 				/*male:$("#male").val(),
+		 				female:$("#female").val(),*/
+		 				gender:$("#gender").val(),
+		 				sport:$("#sport").val(),
+
+		 			}
+		    $.ajax({
+		    	type: "POST",
+		    	url: "/user?email="+$("#email").val(),
+		    	data: data, // serializes the form's elements.
+		      success: function(data){
+		      			alert("user added")
+		               window.location.href="success" // show response from the php script.
+		      }
+		    });
+
+		    e.preventDefault(); // avoid to execute the actual submit of the form.
+		});
+	});
+	</script>
+</html>
